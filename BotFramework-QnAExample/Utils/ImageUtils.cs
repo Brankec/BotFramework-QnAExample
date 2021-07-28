@@ -14,7 +14,7 @@ namespace BotFramework_QnAExample.Util.Image
             {"image/png", ".png"}
         };
         
-        public static byte[] SaveImageFromUrl(string imageUrl, string contentType)
+        public static byte[] StreamImageFromUrl(string imageUrl, string contentType)
         {
             byte[] imageBytes;
             using (WebClient client = new WebClient())
@@ -24,6 +24,16 @@ namespace BotFramework_QnAExample.Util.Image
             }
 
             return imageBytes;
+        }
+        
+        public static void SaveImageFromUrl(string imageUrl, string contentType, string fileName)
+        {
+            byte[] imageBytes;
+            using (WebClient client = new WebClient())
+            {
+                var type = GetImageTypeFromContentType(contentType);
+                client.DownloadFileAsync(new Uri(imageUrl), fileName+type);
+            }
         }
 
         public static string GetImageTypeFromContentType(string contentType)
