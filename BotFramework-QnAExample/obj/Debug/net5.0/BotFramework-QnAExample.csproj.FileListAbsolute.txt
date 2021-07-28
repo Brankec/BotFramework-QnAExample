@@ -71,3 +71,4 @@ E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
+E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\RestSharp.dll

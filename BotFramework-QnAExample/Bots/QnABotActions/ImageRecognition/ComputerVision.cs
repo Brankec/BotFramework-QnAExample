@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using BotFramework_QnAExample.Util.Image;
+using BotFramework_QnAExample.Utils.ImageAPI.API;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Bot.Schema;
@@ -31,9 +31,15 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
                 VisualFeatureTypes.Tags
             };
             
-            // Analyze the URL image
-            //_analyzedImg = await _client.AnalyzeImageAsync(attachment.ContentUrl, visualFeatures: _features);
-            _analyzedImg = await _client.AnalyzeImageAsync("https://i.imgur.com/5snElrr.jpeg", visualFeatures: _features);
+            //saving the image sent by the user as bytes
+            var imageBytes = ImageUtils.SaveImageFromUrl(attachment.ContentUrl, ""); //This image url doesn't contain content type in the url
+            
+            //Uploading the sent image and getting the link to access it
+            IImageAPI imgurApi = new ImgurAPI();
+            var imgLink = await imgurApi.UploadImageFromStream(imageBytes, attachment.ContentType);
+            
+            // Analyze the Image link
+            _analyzedImg = await _client.AnalyzeImageAsync(imgLink, visualFeatures: _features);
         }
 
         public IEnumerable<string> GetImgTagNames()
@@ -49,6 +55,7 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
 
         private static ComputerVisionClient Authenticate(string endpoint, string key)
         {
+            //authenticating computer vision
             ComputerVisionClient client =
                 new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
                     { Endpoint = endpoint };
