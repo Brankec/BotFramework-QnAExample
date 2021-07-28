@@ -42,6 +42,7 @@ namespace BotFramework_QnAExample.Bots.QnABotActions
         {
             var httpClientFac = _httpClientFactory.CreateClient();
             
+            //Setting up QnA Maker to use an endpoint defined in appsettings.json
             return new QnAMaker(new QnAMakerEndpoint
                 {
                     KnowledgeBaseId = _configuration["QnAKnowledgebaseId"],
