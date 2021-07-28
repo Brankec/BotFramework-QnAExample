@@ -64,10 +64,6 @@ E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\obj\Debug
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\obj\Debug\net5.0\ref\BotFramework-QnAExample.dll
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\obj\Debug\net5.0\BotFramework-QnAExample.pdb
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\obj\Debug\net5.0\BotFramework-QnAExample.genruntimeconfig.cache
-E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\DeploymentTemplates\new-rg-parameters.json
-E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\DeploymentTemplates\preexisting-rg-parameters.json
-E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\DeploymentTemplates\template-with-new-rg.json
-E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\DeploymentTemplates\template-with-preexisting-rg.json
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 E:\Code Projects\Rider\BotFramework-QnAExample\BotFramework-QnAExample\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll

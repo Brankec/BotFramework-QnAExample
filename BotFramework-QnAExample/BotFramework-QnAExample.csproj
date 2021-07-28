@@ -15,4 +15,11 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="DeploymentTemplates\new-rg-parameters.json" />
+      <_ContentIncludedByDefault Remove="DeploymentTemplates\preexisting-rg-parameters.json" />
+      <_ContentIncludedByDefault Remove="DeploymentTemplates\template-with-new-rg.json" />
+      <_ContentIncludedByDefault Remove="DeploymentTemplates\template-with-preexisting-rg.json" />
+    </ItemGroup>
+
 </Project>
