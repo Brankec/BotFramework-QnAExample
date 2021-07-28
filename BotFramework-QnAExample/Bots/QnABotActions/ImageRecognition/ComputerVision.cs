@@ -32,7 +32,7 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
             };
             
             //saving the image sent by the user as bytes
-            var imageBytes = ImageUtils.SaveImageFromUrl(attachment.ContentUrl, ""); //This image url doesn't contain content type in the url
+            var imageBytes = ImageUtils.StreamImageFromUrl(attachment.ContentUrl, ""); //This image url doesn't contain content type in the url
             
             //Uploading the sent image and getting the link to access it
             IImageAPI imgurApi = new ImgurAPI();

@@ -21,7 +21,8 @@ namespace BotFramework_QnAExample.Bots
         public QnABot(IConfiguration configuration, ILogger<QnABot> logger, IHttpClientFactory httpClientFactory)
         {
             _qnaAnswers = new QnAAnswers(configuration, logger, httpClientFactory);
-            _imgRecognition = new ComputerVision("e75b9326fb254197bc99a65a87a7a4d2", "https://bonsai-hiring-cv.cognitiveservices.azure.com/");
+            //_imgRecognition = new ComputerVision("e75b9326fb254197bc99a65a87a7a4d2", "https://bonsai-hiring-cv.cognitiveservices.azure.com/");
+            _imgRecognition = new MachineLearningImg();
         }
         
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)

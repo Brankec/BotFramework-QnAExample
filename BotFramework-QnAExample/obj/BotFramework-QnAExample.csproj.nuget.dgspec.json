@@ -56,9 +56,25 @@
               "target": "Package",
               "version": "[4.14.1, )"
             },
+            "Microsoft.ML": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
+            "Microsoft.ML.ImageAnalytics": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
+            "Microsoft.ML.TensorFlow": {
+              "target": "Package",
+              "version": "[1.6.0, )"
+            },
             "RestSharp": {
               "target": "Package",
               "version": "[106.12.0, )"
+            },
+            "SciSharp.TensorFlow.Redist": {
+              "target": "Package",
+              "version": "[2.6.0-rc0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
