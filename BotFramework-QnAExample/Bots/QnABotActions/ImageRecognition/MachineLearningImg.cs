@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.Bot.Schema;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using BotFramework_QnAExample.Util.Image;
+using BotFramework_QnAExample.Utils;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -28,12 +28,11 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
     
     public class MachineLearningImg : IImgRecognition
     {
-        static readonly string _assetsPath = Path.Combine(Environment.CurrentDirectory, "assets");
-        static readonly string _imagesFolder = Path.Combine(_assetsPath, "images");
-        static readonly string _trainTagsTsv = Path.Combine(_imagesFolder, "tags.tsv");
-        static readonly string _testTagsTsv = Path.Combine(_imagesFolder, "test-tags.tsv");
-        static readonly string _predictSingleImage = Path.Combine(_imagesFolder, "toaster3.jpg");
+        static readonly string _assetsPath = Path.Combine(Environment.CurrentDirectory, "assets/ML");
+        static readonly string _imgsFolder = Path.Combine(_assetsPath, "images");
+        static readonly string _trainTagsTsv = Path.Combine(_imgsFolder, "tags.tsv");
         static readonly string _inceptionTensorFlowModel = Path.Combine(_assetsPath, "inception", "tensorflow_inception_graph.pb");
+        public static ImagePrediction _imgPrediction = new ImagePrediction();
 
         public MachineLearningImg()
         {
@@ -50,8 +49,9 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
         
         public static ITransformer GenerateModel(MLContext mlContext)
         {
+            //Generating a model for image prediction
             IEstimator<ITransformer> pipeline = mlContext.Transforms.LoadImages(outputColumnName: "input",
-                    imageFolder: _imagesFolder, inputColumnName: nameof(ImageData.ImagePath))
+                    imageFolder: _imgsFolder, inputColumnName: nameof(ImageData.ImagePath))
                 // The image transforms transform the images into the model's expected format.
                 .Append(mlContext.Transforms.ResizeImages(outputColumnName: "input",
                     imageWidth: InceptionSettings.ImageWidth, imageHeight: InceptionSettings.ImageHeight,
@@ -71,63 +71,43 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
             IDataView trainingData = mlContext.Data.LoadFromTextFile<ImageData>(path:  _trainTagsTsv, hasHeader: false);
             ITransformer model = pipeline.Fit(trainingData);
             
-            IDataView testData = mlContext.Data.LoadFromTextFile<ImageData>(path: _testTagsTsv, hasHeader: false);
-            IDataView predictions = model.Transform(testData);
-
-            // Create an IEnumerable for the predictions for displaying results
-            IEnumerable<ImagePrediction> imagePredictionData = mlContext.Data.CreateEnumerable<ImagePrediction>(predictions, true);
-            DisplayResults(imagePredictionData);
-            
-
             return model;
         }
         
-        public static void ClassifySingleImage(MLContext mlContext, ITransformer model)
+        public static void ClassifySingleImage(MLContext mlContext, ITransformer model, string imagePath)
         {
             var imageData = new ImageData()
             {
-                ImagePath = _predictSingleImage
+                ImagePath = imagePath
             };
             
             // Make prediction function (input = ImageData, output = ImagePrediction)
             var predictor = mlContext.Model.CreatePredictionEngine<ImageData, ImagePrediction>(model);
-            var prediction = predictor.Predict(imageData);
+            _imgPrediction = predictor.Predict(imageData);
             
-            Console.WriteLine($"Image: {Path.GetFileName(imageData.ImagePath)} predicted as: {prediction.PredictedLabelValue} with score: {prediction.Score.Max()} ");
+            //Console.WriteLine($"Image: {Path.GetFileName(imageData.ImagePath)} predicted as: {prediction.PredictedLabelValue} with score: {prediction.Score.Max()}");
         }
         
-        private static void DisplayResults(IEnumerable<ImagePrediction> imagePredictionData)
+        public async Task AnalyzeImgAttachment(Attachment attachment)
         {
-            foreach (ImagePrediction prediction in imagePredictionData)
-            {
-                Console.WriteLine($"Image: {Path.GetFileName(prediction.ImagePath)} predicted as: {prediction.PredictedLabelValue} with score: {prediction.Score.Max()} ");
-            }
-        }
-        
-        public static IEnumerable<ImageData> ReadFromTsv(string file, string folder)
-        {
-            return File.ReadAllLines(file)
-                .Select(line => line.Split('\t'))
-                .Select(line => new ImageData()
-                {
-                    ImagePath = Path.Combine(folder, line[0])
-                });
-        }
-        
-        public Task AnalyzeImgUrl(Attachment attachment)
-        {
+            var filePath = "";
+            var guid = Guid.NewGuid();
             MLContext mlContext = new MLContext();
+            
             ITransformer model = GenerateModel(mlContext);
-            ClassifySingleImage(mlContext, model);
-
-            return null;
-
-            //throw new System.NotImplementedException();
+            
+            var imgType = ImageUtils.GetImageTypeFromContentType(attachment.ContentType);
+            var imageName = guid + imgType;
+            ImageUtils.SaveImageFromUrl(attachment.ContentUrl, _imgsFolder+"/"+imageName);
+            
+            //Saving the image with a GUID name so that we can save it and feed the machine learning with more images for more accurate classification
+            ClassifySingleImage(mlContext, model, filePath);
+            ResourceFiles.Add2ColumnLineToTextFile(_trainTagsTsv, imageName, _imgPrediction.PredictedLabelValue, "\t");
         }
 
         public IEnumerable<string> GetImgTagNames()
         {
-            throw new System.NotImplementedException();
+            return new[] {_imgPrediction.PredictedLabelValue};
         }
     }
 }

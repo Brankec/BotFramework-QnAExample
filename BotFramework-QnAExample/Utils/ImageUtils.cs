@@ -26,19 +26,17 @@ namespace BotFramework_QnAExample.Util.Image
             return imageBytes;
         }
         
-        public static void SaveImageFromUrl(string imageUrl, string contentType, string fileName)
+        public static void SaveImageFromUrl(string imageUrl, string fileName)
         {
-            byte[] imageBytes;
             using (WebClient client = new WebClient())
             {
-                var type = GetImageTypeFromContentType(contentType);
-                client.DownloadFileAsync(new Uri(imageUrl), fileName+type);
+                client.DownloadFile(new Uri(imageUrl), fileName);
             }
         }
 
         public static string GetImageTypeFromContentType(string contentType)
         {
-            var type = contentTypes.FirstOrDefault(x => x.Equals(contentType)).Value;
+            var type = contentTypes.FirstOrDefault(x => x.Key.Equals(contentType, StringComparison.InvariantCultureIgnoreCase)).Value;
 
             return type;
         }

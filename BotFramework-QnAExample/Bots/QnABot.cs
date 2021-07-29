@@ -21,8 +21,9 @@ namespace BotFramework_QnAExample.Bots
         public QnABot(IConfiguration configuration, ILogger<QnABot> logger, IHttpClientFactory httpClientFactory)
         {
             _qnaAnswers = new QnAAnswers(configuration, logger, httpClientFactory);
-            //_imgRecognition = new ComputerVision("e75b9326fb254197bc99a65a87a7a4d2", "https://bonsai-hiring-cv.cognitiveservices.azure.com/");
-            _imgRecognition = new MachineLearningImg();
+            
+            //Loading the image recognition defined in the appsettings.json file
+            _imgRecognition = ImgProcessing.GetImgRecognition();
         }
         
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -81,12 +82,12 @@ namespace BotFramework_QnAExample.Bots
             try
             {
                 //Analyzing the the image
-                await _imgRecognition.AnalyzeImgUrl(attachments.First());
+                await _imgRecognition.AnalyzeImgAttachment(attachments.First());
 
-                //Getting the image tags and then forming and sending a response
+                //Getting the image tags, then forming and sending a response
                 var tags = _imgRecognition.GetImgTagNames();
                 var joinedTagsString = String.Join(", ", tags);
-                response = String.IsNullOrEmpty(joinedTagsString) ? "" : $"This image contains the following tags: {joinedTagsString}";
+                response = String.IsNullOrEmpty(joinedTagsString) ? "" : $"This image contains the following tag(s): {joinedTagsString}";
             }
             catch (Exception e)
             {

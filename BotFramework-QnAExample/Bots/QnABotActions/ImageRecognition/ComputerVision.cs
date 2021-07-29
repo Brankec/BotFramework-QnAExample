@@ -24,7 +24,7 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
             _client = Authenticate(endpoint, subscriptionKey);
         }
         
-        public async Task AnalyzeImgUrl(Attachment attachment)
+        public async Task AnalyzeImgAttachment(Attachment attachment)
         {
             _features = new List<VisualFeatureTypes?>()
             {

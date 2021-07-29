@@ -6,7 +6,7 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
 {
     public interface IImgRecognition
     {
-        public Task AnalyzeImgUrl(Attachment attachment);
+        public Task AnalyzeImgAttachment(Attachment attachment);
 
         public IEnumerable<string> GetImgTagNames();
     }

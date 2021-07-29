@@ -1,4 +1,6 @@
 using BotFramework_QnAExample.Bots;
+using BotFramework_QnAExample.Utils;
+using BotFramework_QnAExample.Utils.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
@@ -46,6 +48,9 @@ namespace BotFramework_QnAExample
                 {
                     endpoints.MapControllers();
                 });
+            
+            //Loading settings defined in appsettings.json
+            SettingsManager.LoadSettings();
         }
     }
 }
