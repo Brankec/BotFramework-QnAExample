@@ -84,8 +84,6 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
             // Make prediction function (input = ImageData, output = ImagePrediction)
             var predictor = mlContext.Model.CreatePredictionEngine<ImageData, ImagePrediction>(model);
             _imgPrediction = predictor.Predict(imageData);
-            
-            //Console.WriteLine($"Image: {Path.GetFileName(imageData.ImagePath)} predicted as: {prediction.PredictedLabelValue} with score: {prediction.Score.Max()}");
         }
         
         public async Task AnalyzeImgAttachment(Attachment attachment)
