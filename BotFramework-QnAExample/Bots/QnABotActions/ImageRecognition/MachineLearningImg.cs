@@ -103,9 +103,12 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
             ResourceFiles.Add2ColumnLineToTextFile(_trainTagsTsv, imageName, _imgPrediction.PredictedLabelValue, "\t");
         }
 
-        public IEnumerable<string> GetImgTagNames()
+        public string GetImgTagNames()
         {
-            return new[] {_imgPrediction.PredictedLabelValue};
+            var joinedTagsString = String.Join(", ", new[] { _imgPrediction.PredictedLabelValue });
+            var response = String.IsNullOrEmpty(joinedTagsString) ? "" : $"This image contains the following tag(s): {joinedTagsString}";
+
+            return response;
         }
     }
 }

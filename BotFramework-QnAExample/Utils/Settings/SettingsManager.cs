@@ -17,5 +17,10 @@ namespace BotFramework_QnAExample.Utils.Settings
         {
             return _settings;
         }
+
+        public static void ModifyLoadedSettings(SettingsModel settings)
+        {
+            _settings = settings;
+        }
     }
 }

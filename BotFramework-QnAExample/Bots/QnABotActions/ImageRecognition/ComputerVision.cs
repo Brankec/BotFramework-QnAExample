@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BotFramework_QnAExample.Util.Image;
 using BotFramework_QnAExample.Utils.ImageAPI.API;
@@ -42,7 +43,7 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
             _analyzedImg = await _client.AnalyzeImageAsync(imgLink, visualFeatures: _features);
         }
 
-        public IEnumerable<string> GetImgTagNames()
+        public string GetImgTagNames()
         {
             var tags = new List<string>();
             foreach (var tag in _analyzedImg.Tags)
@@ -50,7 +51,10 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
                 tags.Add(tag.Name);
             }
 
-            return tags;
+            var joinedTagsString = String.Join(", ", tags);
+            var response = String.IsNullOrEmpty(joinedTagsString) ? "" : $"This image contains the following tag(s): {joinedTagsString}";
+
+            return response;
         }
 
         private static ComputerVisionClient Authenticate(string endpoint, string key)

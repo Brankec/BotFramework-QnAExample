@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BotFramework_QnAExample.Bots.QnABotActions;
 using BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition;
 using BotFramework_QnAExample.Util.Image;
+using BotFramework_QnAExample.Utils.Settings;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,7 @@ namespace BotFramework_QnAExample.Bots
     {
         private QnAAnswers _qnaAnswers;
         private IImgRecognition _imgRecognition;
+        private UserCommands userCommands = new UserCommands();
         
         public QnABot(IConfiguration configuration, ILogger<QnABot> logger, IHttpClientFactory httpClientFactory)
         {
@@ -28,6 +31,12 @@ namespace BotFramework_QnAExample.Bots
         
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
+            if (userCommands.IsCommand(turnContext))
+            {
+                await userCommands.Run(turnContext, cancellationToken);
+                return;
+            }
+            
             await Dialogs(turnContext, cancellationToken);
         }
 
@@ -57,7 +66,7 @@ namespace BotFramework_QnAExample.Bots
             {
                 return;
             }
-            
+
             //Getting the response from the QnA Maker and then sending it
             var response = await _qnaAnswers.Run(turnContext, cancellationToken);
             await RespondToUser(response, turnContext, cancellationToken);
@@ -85,9 +94,7 @@ namespace BotFramework_QnAExample.Bots
                 await _imgRecognition.AnalyzeImgAttachment(attachments.First());
 
                 //Getting the image tags, then forming and sending a response
-                var tags = _imgRecognition.GetImgTagNames();
-                var joinedTagsString = String.Join(", ", tags);
-                response = String.IsNullOrEmpty(joinedTagsString) ? "" : $"This image contains the following tag(s): {joinedTagsString}";
+                response = _imgRecognition.GetImgTagNames();
             }
             catch (Exception e)
             {

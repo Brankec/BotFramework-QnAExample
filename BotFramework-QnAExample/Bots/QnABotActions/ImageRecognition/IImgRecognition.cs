@@ -8,6 +8,6 @@ namespace BotFramework_QnAExample.Bots.QnABotActions.ImageRecognition
     {
         public Task AnalyzeImgAttachment(Attachment attachment);
 
-        public IEnumerable<string> GetImgTagNames();
+        public string GetImgTagNames();
     }
 }
